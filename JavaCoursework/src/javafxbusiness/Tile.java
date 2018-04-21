@@ -32,9 +32,7 @@ public class Tile extends StackPane{
 	
 	public void drawRobot() {
 		text.setText("Robot");
-		if(text.setText()!= null){
-			
-		}
+		
 	}
 	public void drawChargingPod() {
 		text.setText("Charging");

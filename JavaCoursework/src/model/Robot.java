@@ -83,9 +83,19 @@ public class Robot {
     
     private void powerMinus(){
     	//use one if not carrying anything two if it is
-    	if (battery == 0){
-    		hasCrashed = true;
+    	if(!hasCrashed) {
+    		if(!carrying) {
+    			battery--;
+    		}
+    		else if(carrying) {
+    			battery = battery -2;
+    		}
     	}
+    	else if(hasCrashed) {
+    		System.out.println("One of the robots crashed, the simulation will now exit");
+    		//EXIT SIMULATION
+    	}
+    	
     }
     
     public void acceptAssignment(){
