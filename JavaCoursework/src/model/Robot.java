@@ -46,7 +46,6 @@ public class Robot {
     		//checkLocation();
     	}
     }
-    
     /*public void checkLocation(){
     	
     	
