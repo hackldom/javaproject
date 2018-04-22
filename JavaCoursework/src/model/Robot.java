@@ -100,7 +100,7 @@ public class Robot {
     }
     
     public void acceptAssignment(){
-    	
+    	carrying = true;
     }
     public boolean returnToPod(){
     	return false;
