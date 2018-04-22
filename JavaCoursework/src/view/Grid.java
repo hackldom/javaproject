@@ -46,7 +46,7 @@ public class Grid{
 		for(int i = 0; i < numRobots; i++) {
 			Robot r = new Robot(cells[i], cells[0], true, 20);
 		
-			System.out.println("The x coordinate is: " + r.getX());
+			System.out.println("The x coordinate for "+ i +"th robot is: " + r.getX());
 		}
 		
 	}
