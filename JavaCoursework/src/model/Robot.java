@@ -4,25 +4,24 @@ import java.util.List;
 
 
 import java.util.*;
-
+import view.*;
 public class Robot {
     private int battery;
     private static final int  MAX_BATTERY = 20;
-    private int robotX;
-    private int robotY;
+    private Cell[] robotX;
+    private Cell[] robotY;
     private boolean hasCrashed;
     private boolean carrying;
-    static int POD_X;
-    static int POD_Y;
+    
     static String NAME;
 	List<Robot>	robotList = new ArrayList<Robot>();
+	//public Cell[][] cell;
 
     
-    public Robot(int x, int y, boolean isFree, int battery){
+    public Robot(Cell[] x, Cell[] y, boolean isFree, int battery){
     	x = robotX;
     	y = robotY;
-    	POD_X = x;
-    	POD_Y = y;
+    	
     	battery = MAX_BATTERY;
     	hasCrashed = false;
     	carrying = false;
@@ -36,16 +35,19 @@ public class Robot {
     	robotList.remove(r);
     }
     
+    public int getMaxBattery() {
+    	return MAX_BATTERY;
+    }
     
     public void move(int xChange, int yChange){
     	if (!hasCrashed & !(returnToPod())){
     		//move
     		powerMinus();
-    		checkLocation();
+    		//checkLocation();
     	}
     }
     
-    public void checkLocation(){
+    /*public void checkLocation(){
     	
     	
     	if (robotX == POD_X && robotY == POD_Y){
@@ -54,10 +56,10 @@ public class Robot {
     	/*if (hitRobot()){
     		System.out.println("robot " + NAME + " crashed with another robot");
     		//stop simulation
-    	}*/
+    	}
     	
     	
-    }
+    }*/
     	
     
    /*public boolean hitRobot(){
@@ -72,11 +74,11 @@ public class Robot {
     	return false;
     }*/
     
-    public int getX(){
+    public Cell[] getX(){
     	return robotX;
     }
     
-    public int getY(){
+    public Cell[] getY(){
     	return robotY;
     }
     

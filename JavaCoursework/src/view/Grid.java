@@ -1,11 +1,14 @@
+package view;
 import java.util.Scanner;
+
+import model.Robot;
 
 public class Grid{
 	
 	//Height and width could be replaced by size, as it's always going to be a square
-	private double height;
-	private double width;
-	private Cell[][] cells;
+	private static double height;
+	private static double width;
+	private static Cell[][] cells;
 	private static int userInput;
 	static Scanner sc=new Scanner(System.in);
 	static double squares;
@@ -37,6 +40,17 @@ public class Grid{
 		this.width = width;
 	}
 	
+	public static void setRobot() {
+		double numRobots = numOfSingleKit;
+		cells = new Cell[(int) width][(int) height];
+		for(int i = 0; i < numRobots; i++) {
+			Robot r = new Robot(cells[i], cells[0], true, 20);
+		
+			System.out.println("The x coordinate is: " + r.getX());
+		}
+		
+	}
+	
 	public static void main(String[] args) {
 	    System.out.println("How many rows/columns would you like in the grid?");
 	    userInput = sc.nextInt();
@@ -49,10 +63,13 @@ public class Grid{
 	    
 	    
 	    
-	    System.out.println(grid.numOfSingleKit+ " Robots");
-	    System.out.println(grid.numOfSingleKit + " Storage Shelves");
-	    System.out.println(grid.numOfSingleKit + " Packing Stations");
-	    System.out.println(grid.numOfSingleKit + " Chargin' Pods");
+	    System.out.println(grid.numOfSingleKit + " Robots");
+	    setRobot();
+	    //System.out.println(grid.numOfSingleKit + " Storage Shelves");
+	    //System.out.println(grid.numOfSingleKit + " Packing Stations");
+	    //System.out.println(grid.numOfSingleKit + " Chargin' Pods");
+	    
+	    
 	  }
 	
 	
