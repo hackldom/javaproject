@@ -1,4 +1,5 @@
 package controller;
+import java.lang.Math;
 
 public class PathFinder {
 	
@@ -14,12 +15,26 @@ public class PathFinder {
 			return null;
 	}
 	
-	if (s)
+	if ((Math.pow(yDist, yDist) > (Math.pow(xDist, xDist)))) {
+		if (yDist > 0) {
+			return "d";
+		}
+		else {
+			return "u";
+		}
+	}
+	else {
+		if (xDist > 0) {
+			return "r";
+		}
+		else {
+			return "i";
+		}
+	}
 	
 		
 		
-		
-	}
+}
 	
 	
 	
