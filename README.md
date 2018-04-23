@@ -1,2 +1,0 @@
-# javaproject
-Amazon warehouse project

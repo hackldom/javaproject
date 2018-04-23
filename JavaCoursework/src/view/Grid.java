@@ -1,4 +1,6 @@
 package view;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import model.Robot;
@@ -14,6 +16,7 @@ public class Grid{
 	static double squares;
 	static double numOfSingleKit;
 	static double numOfObjects;
+	static List<Robot>	robotList = new ArrayList<Robot>();
 	
 	public Grid(double size) {
 		this.height = size;
@@ -24,6 +27,9 @@ public class Grid{
 		numOfSingleKit = Math.round(numOfObjects / 3.0);
 	}
 	
+	public static Robot getRobotList(int pos) {
+    	return robotList.get(pos);
+    }
 	public int getGridHeight() {
 		return (int)height;
 	}
@@ -45,8 +51,8 @@ public class Grid{
 		cells = new Cell[(int) width][(int) height];
 		for(int i = 0; i < numRobots; i++) {
 			Robot r = new Robot(cells[i], cells[0], true, 20);
-		
-			System.out.println("The x coordinate is: " + r.getX());
+			robotList.add(r);
+			System.out.println("The x coordinate for "+ i +"th robot is: " + getRobotList(i));
 		}
 		
 	}
