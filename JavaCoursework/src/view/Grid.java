@@ -33,7 +33,7 @@ public class Grid{
     }
 	
 	public static PackingStation getPackingStationList(int pos) {
-    	return robotList.get(pos);
+    	return packingList.get(pos);
     }
 	public int getGridHeight() {
 		return (int)height;
@@ -51,12 +51,12 @@ public class Grid{
 		this.width = width;
 	}
 	
-	public static void setRobot() {
+	public static void setRobot(String cID, String rID, int x, int y, int chargeSpeed, int charge) {
 		double numRobots = (numOfSingleKit * 0.8);
 		for(int i = 0; i < numRobots; i++) {
-			Cell cells = new Cell(i, 0);
-			ChargingPod pod = new ChargingPod("cID", cells, 2);
-			Robot r = new Robot(cells, true, 20, pod);
+			Cell cells = new Cell(x, y);
+			ChargingPod pod = new ChargingPod(cID, cells, chargeSpeed);
+			Robot r = new Robot(cells, rID, true, charge, pod);
 			robotList.add(r);
 			System.out.println("The x coordinate for "+ i +"th robot is: " + Integer.toString(getRobotList(i).getX()));
 			System.out.println("This robots charging pod is called" + getRobotList(i).getPod().getID());
@@ -64,13 +64,13 @@ public class Grid{
 		
 	}
 	
-	public static void setPackingStation() {
+	public static void setPackingStation(String pID, int x, int y) {
 		double numStations = (numOfSingleKit * 0.8);
 		for(int i = 0; i < numStations; i++) {
-			Cell cells = new Cell(0, i);
+			Cell cells = new Cell(x, y);
 			PackingStation p = new PackingStation(1,1);
 			packingList.add(p);
-			System.out.println("the position of the packing stations are: ");
+			System.out.println("the position of the packing stations are: " + getPackingStationList(i).g);
 		}
 	}
 	

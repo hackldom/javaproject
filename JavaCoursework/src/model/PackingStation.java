@@ -5,7 +5,7 @@ public class PackingStation {
 	private String[] orders;
 	
 	
-	public PackingStation(int ord, int stat){
+	public PackingStation(Cell cell, int ord, int stat){
 		orders = new String[ord];
 	}
 	

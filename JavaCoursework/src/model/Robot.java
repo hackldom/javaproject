@@ -12,15 +12,16 @@ public class Robot {
     private boolean hasCrashed;
     private boolean carrying;
     private ChargingPod pod;
+    private String rID;
     
     static String NAME;
 	List<Robot>	robotList = new ArrayList<Robot>();
 	//public Cell[][] cell;
 
     
-    public Robot(Cell cell, boolean isFree, int battery, ChargingPod pod){
+    public Robot(Cell cell, String rID, boolean isFree, int battery, ChargingPod pod){
     pos = cell;
-    	
+    	this.rID = rID;
     	battery = MAX_BATTERY;
     	hasCrashed = false;
     	carrying = false;
