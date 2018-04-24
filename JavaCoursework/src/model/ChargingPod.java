@@ -21,7 +21,7 @@ public class ChargingPod {
 	private Robot robot;
 	/**
 	 * Field to store text
-	 * { @see #drawChargingPod() }
+	 * @see #drawChargingPod()
 	 */
 	Text text = new Text();
 	

@@ -72,28 +72,37 @@ public class Grid{
     	return robotList.get(pos);
     }
 	/**
-	 * gets grid height
-	 * @return <code>int</code> height found by accessing {@link #height}
+	 * Gets grid height
+	 * @return <code>int</code> height {@link #height}
 	 */
 	public int getGridHeight() {
 		return (int)height;
 	}
 	/**
-	 * gets grid width
-	 * @return
+	 * Gets grid width
+	 * @return <code>int</code> width {@link #width}
 	 */
 	public int getGridWidth() { 
 		return (int)width;
 	}
-	
+	/**
+	 * Sets grid height
+	 * @param height
+	 */
 	public void setGridHeight(int height) {
 		this.height = height;
 	}
-	
+	/**
+	 * Sets grid width
+	 * @param width
+	 */
 	public void setGridWidth(int width) {
 		this.width = width;
 	}
-	
+	/**
+	 * Sets up robots with position and adds it to robotList
+	 * {@link #robotList}
+	 */
 	public static void setRobot() {
 		double numRobots = numOfSingleKit;
 		cells = new Cell[(int) width][(int) height];
@@ -104,7 +113,10 @@ public class Grid{
 		}
 		
 	}
-	
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 	    System.out.println("How many rows/columns would you like in the grid?");
 	    userInput = sc.nextInt();

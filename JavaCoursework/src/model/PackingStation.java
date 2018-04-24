@@ -34,26 +34,38 @@ public class PackingStation {
 	}
 	
 	/**
-	 *returns number of items a
-	 * @return
+	 *returns number of orders being carried out
+	 *@return <code>int</code length of orders array {@link #orders}
+	 * 
 	 */
-	
 	public int checkOrders() {
 		return orders.length;
 	}
+	/**
+	 * 
+	 */
 	
 	public void checkNextOrder() {
 		
 	}
-	
+	/**
+	 * used to change current PackingStation status
+	 * @param stat refers to the 
+	 */
 	public void changeStatus(String stat) {
 		status = stat;
 	}
-	
+	/**
+	 * sets the current order being packed
+	 * @param ord sets the orders
+	 */
 	public void setOrders(int ord) {
 		orders = new String[ord];
 	}
-	
+	/**
+	 * sets the next order to be packed
+	 * @param next sets the next order to be packed
+	 */
 	public void setNext(String next) {
 		for (int i=0; i<orders.length; i++) {
 			if (!orders[i].isEmpty()) {
