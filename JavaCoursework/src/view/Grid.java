@@ -5,19 +5,54 @@ import java.util.Scanner;
 
 import model.Robot;
 
+/**
+ * Creates a grid structure based on user input values
+ * @author 
+ * @version 24/04/18
+ */
 public class Grid{
 	
 	//Height and width could be replaced by size, as it's always going to be a square
+	/**
+	 * Height and width of grid
+	 */
 	private static double height;
 	private static double width;
+	/**
+	 * cells store Cell array of array 
+	 */
 	private static Cell[][] cells;
+	/**
+	 * userInput contains user input value
+	 */
 	private static int userInput;
+	/**
+	 * scanner takes user input
+	 */
 	static Scanner sc=new Scanner(System.in);
+	/**
+	 * squares is total number of cells
+	 */
 	static double squares;
+	/**
+	 * numOfSingleKit is number of each object
+	 */
 	static double numOfSingleKit;
+	/**
+	 * numOfObjects is total number of objects
+	 */
 	static double numOfObjects;
+	/**
+	 * robotList is an ArrayList of robots
+	 * @see #setRobot
+	 */
 	static List<Robot>	robotList = new ArrayList<Robot>();
 	
+	/**
+	 * Creates a <code>Grid</code> and sets the dimensions based on userInput
+	 * @param size refers to the height and width entered 
+	 * 
+	 */
 	public Grid(double size) {
 		this.height = size;
 		this.width = size;
@@ -26,14 +61,27 @@ public class Grid{
 		numOfObjects = Math.round(squares / 3.0);
 		numOfSingleKit = Math.round(numOfObjects / 3.0);
 	}
+	/**
+	 * Returns the robots position 
+	 * 
+	 * @param pos refers to robot position on the grid
+	 * @return <code>Robot</code> position found by accessing {@link #robotList}
+	 */
 	
 	public static Robot getRobotList(int pos) {
     	return robotList.get(pos);
     }
+	/**
+	 * gets grid height
+	 * @return <code>int</code> height found by accessing {@link #height}
+	 */
 	public int getGridHeight() {
 		return (int)height;
 	}
-	
+	/**
+	 * gets grid width
+	 * @return
+	 */
 	public int getGridWidth() { 
 		return (int)width;
 	}
