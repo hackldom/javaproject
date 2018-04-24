@@ -28,7 +28,7 @@ public class PathFinder {
 			return "r";
 		}
 		else {
-			return "i";
+			return "l";
 		}
 	}
 	
