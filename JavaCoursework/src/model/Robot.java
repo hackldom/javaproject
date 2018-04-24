@@ -8,8 +8,7 @@ import view.*;
 public class Robot {
     private int battery;
     private static final int  MAX_BATTERY = 20;
-    private Cell[] robotX;
-    private Cell[] robotY;
+    private Cell pos;
     private boolean hasCrashed;
     private boolean carrying;
     
@@ -18,9 +17,8 @@ public class Robot {
 	//public Cell[][] cell;
 
     
-    public Robot(Cell[] x, Cell[] y, boolean isFree, int battery){
-    	x = robotX;
-    	y = robotY;
+    public Robot(Cell cell, boolean isFree, int battery){
+    pos = cell;
     	
     	battery = MAX_BATTERY;
     	hasCrashed = false;
@@ -58,7 +56,6 @@ public class Robot {
     	}
     	
     	
-    }*/
     	
     
    /*public boolean hitRobot(){
@@ -73,12 +70,17 @@ public class Robot {
     	return false;
     }*/
     
-    public Cell[] getX(){
-    	return robotX;
+    public Cell getCell(){
+    	return pos;
     }
     
-    public Cell[] getY(){
-    	return robotY;
+    
+    public int getX(){
+    	return pos.getX();
+    }
+    
+    public int getY(){
+    	return pos.getY();
     }
     
     

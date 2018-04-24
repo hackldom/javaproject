@@ -47,12 +47,12 @@ public class Grid{
 	}
 	
 	public static void setRobot() {
-		double numRobots = numOfSingleKit;
-		cells = new Cell[(int) width][(int) height];
+		double numRobots = (numOfSingleKit * 0.8);
 		for(int i = 0; i < numRobots; i++) {
-			Robot r = new Robot(cells[i], cells[0], true, 20);
+			Cell cells = new Cell(i, 0);
+			Robot r = new Robot(cells, true, 20);
 			robotList.add(r);
-			System.out.println("The x coordinate for "+ i +"th robot is: " + getRobotList(i));
+			System.out.println("The x coordinate for "+ i +"th robot is: " + Integer.toString(getRobotList(i).getX()));
 		}
 		
 	}
