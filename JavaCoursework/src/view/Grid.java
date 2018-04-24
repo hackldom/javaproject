@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.ChargingPod;
+import model.PackingStation;
 import model.Robot;
 
 public class Grid{
@@ -11,24 +12,27 @@ public class Grid{
 	//Height and width could be replaced by size, as it's always going to be a square
 	private static double height;
 	private static double width;
-	private static Cell[][] cells;
 	private static int userInput;
 	static Scanner sc=new Scanner(System.in);
 	static double squares;
 	static double numOfSingleKit;
 	static double numOfObjects;
 	static List<Robot>	robotList = new ArrayList<Robot>();
+	static List<PackingStation> packingList = new ArrayList<PackingStation>();
 	
 	public Grid(double size) {
 		this.height = size;
 		this.width = size;
-		cells = new Cell[(int) width][(int) height];
 		squares = size * size;
 		numOfObjects = Math.round(squares / 3.0);
 		numOfSingleKit = Math.round(numOfObjects / 3.0);
 	}
 	
 	public static Robot getRobotList(int pos) {
+    	return robotList.get(pos);
+    }
+	
+	public static PackingStation getPackingStationList(int pos) {
     	return robotList.get(pos);
     }
 	public int getGridHeight() {
@@ -60,13 +64,15 @@ public class Grid{
 		
 	}
 	
-	/*public static void setPackingStation() {
+	public static void setPackingStation() {
 		double numStations = (numOfSingleKit * 0.8);
 		for(int i = 0; i < numStations; i++) {
 			Cell cells = new Cell(0, i);
-			PackingStation p();
+			PackingStation p = new PackingStation(1,1);
+			packingList.add(p);
+			System.out.println("the position of the packing stations are: ");
 		}
-	}*/
+	}
 	
 	public static void main(String[] args) {
 	    System.out.println("How many rows/columns would you like in the grid?");
