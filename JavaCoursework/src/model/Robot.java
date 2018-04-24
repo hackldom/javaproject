@@ -11,23 +11,32 @@ public class Robot {
     private Cell pos;
     private boolean hasCrashed;
     private boolean carrying;
+    private ChargingPod pod;
     
     static String NAME;
 	List<Robot>	robotList = new ArrayList<Robot>();
 	//public Cell[][] cell;
 
     
-    public Robot(Cell cell, boolean isFree, int battery){
+    public Robot(Cell cell, boolean isFree, int battery, ChargingPod pod){
     pos = cell;
     	
     	battery = MAX_BATTERY;
     	hasCrashed = false;
     	carrying = false;
+    	this.pod = pod;
     }
 
     public void addRobot(Robot r) {
     	robotList.add(r);
     }
+    
+   /* public void charge(){
+		while (robot.getCharge() <= MAX_BATTERY/2) 
+		{
+			robot.charge();
+		}
+	}*/
     
     public void removeRobot(Robot r) {
     	robotList.remove(r);
@@ -81,6 +90,10 @@ public class Robot {
     
     public int getY(){
     	return pos.getY();
+    }
+    
+    public ChargingPod getPod() {
+    	return pod;
     }
     
     

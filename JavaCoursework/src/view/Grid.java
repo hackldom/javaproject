@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import model.ChargingPod;
 import model.Robot;
 
 public class Grid{
@@ -50,12 +51,22 @@ public class Grid{
 		double numRobots = (numOfSingleKit * 0.8);
 		for(int i = 0; i < numRobots; i++) {
 			Cell cells = new Cell(i, 0);
-			Robot r = new Robot(cells, true, 20);
+			ChargingPod pod = new ChargingPod("cID", cells, 2);
+			Robot r = new Robot(cells, true, 20, pod);
 			robotList.add(r);
 			System.out.println("The x coordinate for "+ i +"th robot is: " + Integer.toString(getRobotList(i).getX()));
-		}
+			System.out.println("This robots charging pod is called" + getRobotList(i).getPod().getID());
+			}
 		
 	}
+	
+	/*public static void setPackingStation() {
+		double numStations = (numOfSingleKit * 0.8);
+		for(int i = 0; i < numStations; i++) {
+			Cell cells = new Cell(0, i);
+			PackingStation p();
+		}
+	}*/
 	
 	public static void main(String[] args) {
 	    System.out.println("How many rows/columns would you like in the grid?");

@@ -1,27 +1,24 @@
 package model;
 
-import javafx.scene.text.Text;
+import view.Cell;
 
 public class ChargingPod {
-	private static final int  MAX_BATTERY = 20;
-	private boolean isCharging;
-	private Robot robot;
-	Text text = new Text();
+	String cID;
+	Cell pos;
+	int chargeSpeed;
 	
-	public ChargingPod() {
-		
+	public ChargingPod(String cID, Cell cell, int chargeSpeed) {
+		this.cID = cID;
+		pos = cell;
+		this.chargeSpeed = chargeSpeed;
 	}
 	
-	public void charge(){
-		while (robot.getCharge() <= MAX_BATTERY/2) 
-		{
-			robot.charge();
-		}
-	}
-	public void drawChargingPod() {
-		text.setText("Charging");
-		
+	public int getCharge(){
+		return chargeSpeed;
 	}
 	
+	public String getID() {
+		return cID;
 	
+	}
 }
