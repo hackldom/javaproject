@@ -3,7 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import controller.CostEstimation;
+import controller.PathFinder;
 import model.ChargingPod;
+import model.Order;
 import view.InputReader;
 import model.PackingStation;
 import model.Robot;
@@ -14,6 +17,7 @@ public class Simulation{
 	//Height and width could be replaced by size, as it's always going to be a square
 	private int height;
 	private int width;
+	private static int tick;
 	static Scanner sc=new Scanner(System.in);
 	static double squares;
 	static double numOfSingleKit;
@@ -21,14 +25,19 @@ public class Simulation{
 	static List<Robot>	robotList = new ArrayList<Robot>();
 	static List<StorageShelf> shelfList = new ArrayList<StorageShelf>();
 	static List<PackingStation> packingList = new ArrayList<PackingStation>();
+	static List<Order> orderList = new ArrayList<Order>();
 	static InputReader simFile;
     static int charge;
     static int chargeSpeed;
     static int numOfRobots;
     static int numOfShelfs;
     static int numOfStations;
+    static int numOfOrders;
     static Grid grid;
-
+    static boolean runSimulation;
+    static PathFinder pF;
+    static CostEstimation cE;
+    
 	public Simulation() {
 
 		numOfObjects = Math.round(squares / 3.0);
@@ -37,6 +46,9 @@ public class Simulation{
 		numOfRobots = 0;
 		numOfShelfs = 0;
 		numOfStations = 0;
+		numOfOrders = 0;
+		pF = new PathFinder();
+		cE = new CostEstimation();
 	}
 
 	public static Robot getRobotList(int pos) {
@@ -47,6 +59,9 @@ public class Simulation{
     }
 	public static PackingStation getPackingStationList(int pos) {
     	return packingList.get(pos);
+    }
+	public static Order getOrderList(int pos) {
+    	return orderList.get(pos);
     }
 	public int getGridHeight() {
 		return (int)height;
@@ -69,7 +84,8 @@ public class Simulation{
 			ChargingPod pod = new ChargingPod(cID, cells, chargeSpeed);
 			Robot r = new Robot(cells, rID, true, charge, pod);
 			robotList.add(r);
-			System.out.println("The x coordinate for "+ rID +" robot is: " + Integer.toString(getRobotList(numOfRobots).getX()));
+			System.out.println("The coordinates for "+ rID +" robot is: (" + Integer.toString(getRobotList(numOfRobots).getX())
+			+ ", " + Integer.toString(getRobotList(numOfRobots).getY()) + ")");
 			System.out.println("This robots charging pod is called " + getRobotList(numOfRobots).getPod().getID());
 			numOfRobots++;
 			}
@@ -78,8 +94,8 @@ public class Simulation{
 		Cell cells = new Cell(x, y);
 		StorageShelf s = new StorageShelf(cells, sID);
 		shelfList.add(s);
-		System.out.println("The x coordinate for "+ sID +" robot is: " + Integer.toString(getStorageShelfList(numOfShelfs).getX()));
-		System.out.println("This robots charging pod is called " + getStorageShelfList(numOfShelfs).getID());
+		System.out.println("The coordinates for "+ sID +" shelf is: (" + Integer.toString(getStorageShelfList(numOfShelfs).getX())
+		+ ", " + Integer.toString(getStorageShelfList(numOfShelfs).getY()) +")");
 		numOfShelfs++;
 		}
 
@@ -87,24 +103,38 @@ public class Simulation{
 		Cell cells = new Cell(x, y);
 		PackingStation p = new PackingStation(cells, pID);
 		packingList.add(p);
-		System.out.println("The x coordinate for "+ pID +" robot is: " + Integer.toString(getPackingStationList(numOfStations).getX()));
-		System.out.println("This robots charging pod is called " + getPackingStationList(numOfStations).getID());
+		System.out.println("The coordinates for "+ pID +" packing station is: (" + Integer.toString(getPackingStationList
+		(numOfStations).getX()) + ", " + Integer.toString(getPackingStationList(numOfStations).getY()) + ")");
 		numOfStations++;
 		}
 
-
-
-/*	public static void setPackingStation(String pID, int x, int y) {
-		double numStations = (numOfSingleKit * 0.8);
-		for(int i = 0; i < numStations; i++) {
-			Cell cells = new Cell(x, y);
-			PackingStation p = new PackingStation(1,1);
-			packingList.add(p);
-			System.out.println("the position of the packing stations are: " + getPackingStationList(i).g);
+	public static void setOrder(int ticks, String location) {
+		int x= 0;
+		Cell newCell = null;
+		while (x < shelfList.size()){
+			if (getStorageShelfList(x).getsID().equals(location)){
+				newCell = getStorageShelfList(x).getCell();
+				x = shelfList.size();		
+			}
+			x++;
 		}
-	}*/
+		Order order = new Order(ticks, newCell);
+		orderList.add(order);
+		System.out.println("new order number " + numOfOrders + " has been stored in storage shelf " + location + " and "
+		+ "takes " + getOrderList(numOfOrders).getTicks() + " ticks");
+		numOfOrders++;
+		}
 
-
+	private static int checkCrashed(int x) {
+		int y = x;
+		while (x < numOfRobots){
+			x++;
+			if (getRobotList(y).getCell().equals(getRobotList(x).getCell())){
+				return y;
+			}
+		}
+		return -1;
+	}
 
     public static void readFile() {
     	String[] line;
@@ -117,24 +147,69 @@ public class Simulation{
     	System.out.println("charge speed is " + Integer.toString(chargeSpeed));
     	int loop = 1;
     	while (loop == 1) {
+    		try{
     		line = simFile.nextLine();
-    		System.out.println(line[0]);
+    		//System.out.println(line[0]);
     		if (line[0].equals("podRobot")){
     			setRobot(line[1], line[2], Integer.valueOf(line[3]), Integer.valueOf(line[4]), chargeSpeed, charge);
     		}
-    		else if (line[0] == "shelf"){
+    		else if (line[0].equals("shelf")){
     			setShelf(line[1], Integer.valueOf(line[2]),  Integer.valueOf(line[3]));
     		}
-    		else if (line[0] == "station"){
+    		else if (line[0].equals("station")){
     			setStation(line[1], Integer.valueOf(line[2]),  Integer.valueOf(line[3]));
     		}
-    		else {
+    		else if (line[0].equals("order")){
+    			setOrder(Integer.valueOf(line[1]), line[2]);
+    		}
+    		} catch ( java.util.NoSuchElementException e){
     			loop = 0;
+    			}
     		}
-    		}
-
-
     	}
+
+	/**
+	 * Run the simulation from its current state for the given number of steps.
+	 * Stop before the given number of steps if it ceases to be viable.
+	 */
+	public static void simulate()
+	{
+		tick = 1;
+		runSimulation = true;
+		while(runSimulation) {
+			System.out.println("currently on tick " + Integer.toString(tick) + " click enter to run next tick:");
+		    int userInput = sc.nextInt();
+			simulateOneStep();
+		}
+	}
+	
+	/**
+	 * Run the simulation from its current state for a single step.
+	 * Iterate over the whole field updating the state of each
+	 * fox and rabbit.
+	 */
+	public static void simulateOneStep()
+	{
+		tick++;
+		for (int x = 0; x < numOfRobots-1; x++){
+			if (checkCrashed(x) != -1){
+				System.out.println("Robot " + getRobotList(x).getRID() + " has crashed into Robot " + getRobotList
+				(checkCrashed(x)).getRID());
+			}
+			else if (orderList.size() == 0){
+				System.out.println("Simulation complete! All orders packed");
+			}
+			else {
+				for (int p = 0; p < numOfStations; p++){
+					if (getPackingStationList(p).gotOrder() == false){
+						
+					}
+				}
+			}
+		}
+		
+	}
+    
 
 	public static void main(String[] args) {
 		Simulation Sim = new Simulation();
@@ -155,11 +230,14 @@ public class Simulation{
 	    System.out.println("There are " + Integer.toString(grid.getSquares()) + " cells in the grid" );
 
 	    readFile();
-	    //System.out.println(grid.numOfSingleKit + " Storage Shelves");
-	    //System.out.println(grid.numOfSingleKit + " Packing Stations");
-	    //System.out.println(grid.numOfSingleKit + " Charging Pods");
+	    simulate();
+	  //  System.out.println(grid.numOfSingleKit + " Storage Shelves");
+	   // System.out.println(grid.numOfSingleKit + " Packing Stations");
+	   // System.out.println(grid.numOfSingleKit + " Charging Pods");
 
 
 	  }
 
+	
+	
 }

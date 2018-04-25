@@ -17,10 +17,8 @@ public class Robot {
 	private int charge;
 	private String cpID;
     static String NAME;
+    private Cell destination;
 	List<Robot>	robotList = new ArrayList<Robot>();
-
-	//public Cell[][] cell;
-
     
     public Robot(Cell cell, String rID, boolean isFree, int battery, ChargingPod pod){
     	pos = cell;
@@ -34,18 +32,7 @@ public class Robot {
     public void addRobot(Robot r) {
     	robotList.add(r);
     }
-    
-   /* public void charge(){
-		while (robot.getCharge() <= MAX_BATTERY/2) 
-		{
-			robot.charge();
-		}
-	}*/
-    
-    public void removeRobot(Robot r) {
-    	robotList.remove(r);
-    }
-    
+
 	public void move(int xChange, int yChange){
 		if (!crashed){
 			//move
@@ -70,6 +57,10 @@ public class Robot {
 		gotItem = false;
 	}
 
+	public Cell getCell(){
+		return pos;
+	}
+	
 	public int getX(){
 		return pos.getX();
 	}
@@ -101,9 +92,21 @@ public class Robot {
 	public int getCharge() {
 		return charge;
 	}
+	
+	public Cell getDestination(){
+		return destination;
+	}
+	
+	public void setDestintion (Cell destination){
+    	this.destination = destination;
+    }
 
 	public void charge() {
 		charge++;
+	}
+	
+	public ChargingPod getPod(){
+		return pod;
 	}
 
 	private void powerMinus(){

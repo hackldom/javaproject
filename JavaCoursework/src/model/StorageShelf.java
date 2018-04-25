@@ -3,28 +3,28 @@ package model;
 import view.Cell;
 
 public class StorageShelf {
-	private int sId;
+	private String sID;
 	private Cell cell;
 	
-	public StorageShelf(Cell cell, int sID) {
-		this.sId = sID;
+	public StorageShelf(Cell cell, String sID) {
+		this.cell = cell;
+		this.sID = sID;
 	}
 	
 	
-	public int getsId() {
-		return sId;
+	public String getsID() {
+		return sID;
 	}
-
-	public void setsId(int sId) {
-		this.sId = sId;
-	}
-
+	
 	public Cell getCell() {
 		return cell;
 	}
-
-	public void setCell(Cell cell) {
-		this.cell = cell;
+	public int getX(){
+		return cell.getX();
 	}
+	public int getY(){
+		return cell.getY();
+	}
+	
 
 }
