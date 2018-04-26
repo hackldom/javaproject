@@ -7,126 +7,145 @@ import java.util.*;
 import view.*;
 public class Robot {
     private int battery;
-    private static final int  MAX_BATTERY = 20;
     private Cell pos;
-    private boolean hasCrashed;
-    private boolean carrying;
+    private boolean gotItem;
+    private boolean busy;
     private ChargingPod pod;
     private String rID;
-    
-    static String NAME;
+	private int charge;
+	private String cpID;
+    private Cell shelfCell;
+    private Cell stationCell;
+    private boolean returnToPod;
 	List<Robot>	robotList = new ArrayList<Robot>();
-	//public Cell[][] cell;
 
-    
     public Robot(Cell cell, String rID, boolean isFree, int battery, ChargingPod pod){
-    pos = cell;
+    	pos = cell;
     	this.rID = rID;
-    	battery = MAX_BATTERY;
-    	hasCrashed = false;
-    	carrying = false;
+    	this.charge = battery;
+    	gotItem = false;
     	this.pod = pod;
+    	busy = false;
     }
 
     public void addRobot(Robot r) {
     	robotList.add(r);
     }
-    
-   /* public void charge(){
-		while (robot.getCharge() <= MAX_BATTERY/2) 
-		{
-			robot.charge();
+
+	public void move(String direction){
+		if (direction.equals("d")){
+			pos.changeY(1);
 		}
-	}*/
-    
-    public void removeRobot(Robot r) {
-    	robotList.remove(r);
+		if (direction.equals("u")){
+			pos.changeY(-1);
+		}
+		if (direction.equals("r")){
+			pos.changeX(1);
+		}
+		if (direction.equals("l")){
+			pos.changeX(-1);
+		}
+	}
+
+	public void pickItem() {
+		gotItem = true;
+	}
+
+	public void drop() {
+		gotItem = false;
+	}
+
+	public Cell getCell(){
+		return pos;
+	}
+
+	public int getX(){
+		return pos.getX();
+	}
+
+	public int getY(){
+		return pos.getY();
+	}
+
+	public boolean getBusy(){
+		return busy;
+	}
+
+	public boolean getReturnToPod(){
+		return returnToPod;
+	}
+
+	public boolean carrying() {
+		return gotItem;
+	}
+
+	public String getCPID() {
+		return cpID;
+	}
+
+	public String getRID() {
+		return rID;
+	}
+
+	public int getCharge() {
+		return charge;
+	}
+	
+	public Cell getStationCell(){
+		return stationCell;
+	}
+	
+	public Cell getShelfCell(){
+		return shelfCell;
+	}
+
+	public void free(){
+		busy = false;
+	}
+
+	public void busy(){
+		busy = true;
+	}
+
+	public Cell getDestination(){
+		if (getBusy()){
+			if (gotItem){
+				return stationCell;
+			}
+			else{
+				
+				return shelfCell;
+			}
+		}
+		if (returnToPod){
+			return pod.getCell();
+		}
+		else {
+			return null;
+		}
+	}
+
+	public void returnToPod(){
+		returnToPod = true;
+	}
+
+	public void setDestintion (Cell shelf, Cell station){
+    	shelfCell = shelf;
+    	stationCell = station;
     }
-    
-    public int getMaxBattery() {
-    	return MAX_BATTERY;
-    }
-    
-    public void move(int xChange, int yChange){
-    	if (!hasCrashed & !(returnToPod())){
-    		//move
-    		powerMinus();
-    		//checkLocation();
-    	}
-    }
-    /*public void checkLocation(){
-    	
-    	
-    	if (robotX == POD_X && robotY == POD_Y){
-    		charge();
-    	}
-    	/*if (hitRobot()){
-    		System.out.println("robot " + NAME + " crashed with another robot");
-    		//stop simulation
-    	}
-    	
-    	
-    	
-    
-   /*public boolean hitRobot(){
-    	for (int i = 0; grid.getRobots().length){
-    		if (!(grid.getRobots()[i].equals(grid.getRobots()[NAME]))){
-    			if (grid.getRobots()[i].getX() == robotX && grid.getRobots()[i].getY() == robotY){
-    				return true;
-    			}
-    		}
-    		i++;
-    	}
-    	return false;
-    }*/
-    
-    public Cell getCell(){
-    	return pos;
-    }
-    
-    
-    public int getX(){
-    	return pos.getX();
-    }
-    
-    public int getY(){
-    	return pos.getY();
-    }
-    
-    public ChargingPod getPod() {
-    	return pod;
-    }
-    
-    
-    private void powerMinus(){
-    	//use one if not carrying anything two if it is
-    	if(!hasCrashed) {
-    		if(!carrying) {
-    			battery--;
-    		}
-    		else if(carrying) {
-    			battery = battery -2;
-    		}
-    	}
-    	else if(hasCrashed) {
-    		System.out.println("One of the robots crashed, the simulation will now exit");
-    		//EXIT SIMULATION
-    	}
-    	
-    }
-    
-    public void acceptAssignment(){
-    	carrying = true;
-    }
-    public boolean returnToPod(){
-    	return false;
-    }
-    
-    public int getCharge() {
-    	return battery;
-    }
-    
-    public void charge() {
-    	battery++;
-    }
+
+	public void charge() {
+		charge++;
+	}
+
+	public ChargingPod getPod(){
+		return pod;
+	}
+
+	private void powerMinus(){
+		//use one if not carrying anything two if it is
+		charge = charge - 1;
+		
+	}
+
 }
