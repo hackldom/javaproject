@@ -127,11 +127,12 @@ public class Simulation{
 
 	private static int checkCrashed(int x) {
 		int y = x;
+		x++;
 		while (x < numOfRobots){
-			x++;
-			if (getRobotList(y).getCell().equals(getRobotList(x).getCell())){
-				return y;
+			if ((getRobotList(y).getCell().getX() == getRobotList(x).getCell().getX()) && (getRobotList(y).getCell().getY() == getRobotList(y).getCell().getY())){
+				return x;
 			}
+			x++;
 		}
 		return -1;
 	}
@@ -180,6 +181,8 @@ public class Simulation{
 			System.out.println("currently on tick " + Integer.toString(tick) + " press enter to run next tick:");
 		    String userInput = sc.nextLine();
 			simulateOneStep();
+			print();
+			tick++;
 		}
 	}
 
@@ -191,7 +194,6 @@ public class Simulation{
 	public static void simulateOneStep()
 	{
 		System.out.println("simulateOneStep");
-		tick++;
 		if (simFinished()) {
 			System.out.println("Simulation finished");
 			runSimulation = false;
@@ -205,7 +207,7 @@ public class Simulation{
 				}
 			}
 
-			for (int x = 0; x < numOfRobots-1; x++){
+			for (int x = 0; x < numOfRobots; x++){
 				if (getRobotList(x).getBusy() || getRobotList(x).getReturnToPod()){
 					Cell destination = getRobotList(x).getDestination();
 					String direction = pF.getDirection(getRobotList(x).getX(),getRobotList(x).getY(), destination.getX(), destination.getY());
@@ -226,22 +228,27 @@ public class Simulation{
 
 	private static void print(){
 		System.out.println("Tick: " + tick);
-		for (int x = 0; x < numOfStations; x++){
-			System.out.println(getPackingStationList(x).getpID() + " " + getRobotList(x).getCell().toString());
-				}
-			}
+		for (int x = 0; x < packingList.size(); x++){
+			System.out.println(getPackingStationList(x).getpID() + " " + getPackingStationList(x).getCell().toString());
+		}
+		for (int x = 0; x < shelfList.size(); x++){
+			System.out.println(shelfList.get(x).getsID() + " " + shelfList.get(x).getCell().toString());
+		}
+		for (int x = 0; x < robotList.size(); x++){
+			System.out.println(getRobotList(x).getCPID() + " " + getRobotList(x).getPod().getCell().toString());
+		}
+		for (int x = 0; x < robotList.size(); x++){
+			System.out.println(getRobotList(x).getRID() + " " + getRobotList(x).getCell().toString());
+		}
+		for (int x = 0; x < orderList.size(); x++){
+			System.out.println("Order at " + getOrderList(x).getSID() + " and takes " + getOrderList(x).getTicks() + " ticks to unpack");
+		}
+
+	}
 
 
 
 	private static boolean simFinished() {
-		if (orderList.size() > 0){
-			return false;
-		}
-		for (int x = 0; x < numOfStations; x++){
-			if (getPackingStationList(x).gotOrder()){
-				return false;
-			}
-		}
 		for (int x = 0; x < numOfRobots-1; x++){
 
 			if (checkCrashed(x) != -1){
@@ -257,6 +264,14 @@ public class Simulation{
 				return true;
 			}
 			}
+		if (orderList.size() > 0){
+			return false;
+		}
+		for (int x = 0; x < numOfStations; x++){
+			if (getPackingStationList(x).gotOrder()){
+				return false;
+			}
+		}
 		System.out.println("Simulation complete! All orders packed");
 		return true;
 	}

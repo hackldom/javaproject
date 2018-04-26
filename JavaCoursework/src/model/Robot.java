@@ -80,7 +80,7 @@ public class Robot {
 	}
 
 	public String getCPID() {
-		return cpID;
+		return pod.getID();
 	}
 
 	public String getRID() {
@@ -90,11 +90,11 @@ public class Robot {
 	public int getCharge() {
 		return charge;
 	}
-	
+
 	public Cell getStationCell(){
 		return stationCell;
 	}
-	
+
 	public Cell getShelfCell(){
 		return shelfCell;
 	}
@@ -113,7 +113,7 @@ public class Robot {
 				return stationCell;
 			}
 			else{
-				
+
 				return shelfCell;
 			}
 		}
@@ -145,7 +145,7 @@ public class Robot {
 	private void powerMinus(){
 		//use one if not carrying anything two if it is
 		charge = charge - 1;
-		
+
 	}
 
 }
