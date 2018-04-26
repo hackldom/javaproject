@@ -4,7 +4,13 @@ package controller;
 
 public class CostEstimation {
 
-
+	private int gridHeight;
+	private int gridWidth;
+	
+	public CostEstimation(int height, int width) {
+		gridHeight = height;
+		gridWidth = width;
+	}
 	
 	public boolean trip(int x, int y, double charge, int packingX, int packingY, int destinationX, int destinationY) {
 		double firstTripY = destinationY - y;

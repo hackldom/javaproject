@@ -1,30 +1,13 @@
 package model;
 
-import view.Cell;
-
 public class StorageShelf {
-	private String sID;
-	private Cell cell;
-	
-	public StorageShelf(Cell cell, String sID) {
-		this.cell = cell;
-		this.sID = sID;
-	}
+	private int Shelves[]; 
 	
 	
-	public String getsID() {
-		return sID;
+	public int getShelf(int shelfNumber)
+	{
+		int orderedItem = Shelves[shelfNumber];
+		return orderedItem;
 	}
-	
-	public Cell getCell() {
-		return cell;
-	}
-	public int getX(){
-		return cell.getX();
-	}
-	public int getY(){
-		return cell.getY();
-	}
-	
 
 }
