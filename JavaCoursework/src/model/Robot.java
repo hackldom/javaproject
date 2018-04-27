@@ -80,7 +80,7 @@ public class Robot {
 	}
 
 	public String getCPID() {
-		return cpID;
+		return pod.getID();
 	}
 
 	public String getRID() {
@@ -90,6 +90,7 @@ public class Robot {
 	public int getCharge() {
 		return charge;
 	}
+<<<<<<< HEAD
 	
 	public Cell getStationCell(){
 		return stationCell;
@@ -124,6 +125,42 @@ public class Robot {
 			return null;
 		}
 	}
+=======
+
+	public Cell getStationCell(){
+		return stationCell;
+	}
+
+	public Cell getShelfCell(){
+		return shelfCell;
+	}
+
+	public void free(){
+		busy = false;
+	}
+
+	public void busy(){
+		busy = true;
+	}
+
+	public Cell getDestination(){
+		if (getBusy()){
+			if (gotItem){
+				return stationCell;
+			}
+			else{
+
+				return shelfCell;
+			}
+		}
+		if (returnToPod){
+			return pod.getCell();
+		}
+		else {
+			return null;
+		}
+	}
+>>>>>>> 57673bf32ebdb18a6bcf40fac7ffd6c92a89b4c1
 
 	public void returnToPod(){
 		returnToPod = true;
@@ -145,7 +182,11 @@ public class Robot {
 	private void powerMinus(){
 		//use one if not carrying anything two if it is
 		charge = charge - 1;
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 57673bf32ebdb18a6bcf40fac7ffd6c92a89b4c1
 	}
 
 }

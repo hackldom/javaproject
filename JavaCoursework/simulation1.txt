@@ -1,7 +1,7 @@
 format 1
 width 3
 height 3
-capacity 20
+capacity 100
 chargeSpeed 1
 podRobot c0 r0 2 0
 podRobot c1 r1 4 0
