@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -11,157 +12,270 @@ import view.*;
  * @version 24/04/18
  *
  */
-
 public class Robot {
 	/**
-	 * battery gives level of charge
-	 * @see #getCharge()
+	 * Robots cell position
 	 */
-    private int battery;
+    private Cell pos;
     /**
-     * Maximum battery capacity of the robot
+	 * Whether it has item or not
+	 */
+    private boolean gotItem;
+    /**
+     * Whether Robot is currently processing an order
+     * @see #free()
      */
-    private static final int  MAX_BATTERY = 20;
+    private boolean busy;
     /**
-     * refers to X position of the robot in the grid
+     * pod is ChargingPod object
      */
-    private Cell[] robotX;
+    private ChargingPod pod;
     /**
-     * refers to Y position of the robot in the grid
+     * Id of the robot
      */
-    private Cell[] robotY;
+    private String rID;
     /**
-     * whether the robot has crashed or still functioning
+     * battery level of the robot
      */
-    private boolean hasCrashed;
+	private int charge;
+	/**
+	 * Max charge of the battery
+	 */
+	public static int MAX_CHARGE;
+	/**
+	 * ChargingPod ID
+	 */
+	private String cpID;
+	/**
+	 * Location of StorageShelf
+	 */
+    private Cell shelfCell;
     /**
-     * Whether the robot is carrying an order or not
+     * Location of PackingStation
      */
-    private boolean carrying;
+    private Cell stationCell;
     /**
-     * 
+     * Robot return to pod or not
      */
-    static String NAME;
+    private boolean returnToPod;
     /**
-     * An ArrayList to store objects of type Robot
-     * @see #addRobot(Robot) 
+     * ArrayList containing the Robots in the simulation
      */
 	List<Robot>	robotList = new ArrayList<Robot>();
-	//public Cell[][] cell;
-
-    /**
-     * Creates a <code>Robot</code> with its position on the grid 
-     * @param x is the coordinate of the Robot in the grid
-     * @param y is the coordinate of the Robot in the grid
-     * @param isFree
-     * @param battery refers to current battery level
-     */
-    public Robot(Cell[] x, Cell[] y, boolean isFree, int battery){
-    	x = robotX;
-    	y = robotY;
-    	
-    	battery = MAX_BATTERY;
-    	hasCrashed = false;
-    	carrying = false;
+	/**
+	 * Creates a <code>Robot</code> and sets its position, battery, id and ChargingPod
+	 * @param cell location of Robot
+	 * @param rID Robot ID
+	 * @param isFree Whether its being used or not
+	 * @param battery battery level of the Robot
+	 * @param pod is the Robots paired ChargingPod
+	 */
+    public Robot(Cell cell, String rID, boolean isFree, int battery, ChargingPod pod){
+    	pos = cell;
+    	this.rID = rID;
+    	this.charge = battery;
+    	gotItem = false;
+    	this.pod = pod;
+    	busy = false;
+    	MAX_CHARGE = battery;
     }
     /**
-     * adds a Robot to the robotList ArrayList
-     * @param r is the Robot being added
+     * Adds the Robot to the ArrayList
+     * @param r is the robot reference
      */
     public void addRobot(Robot r) {
     	robotList.add(r);
     }
     /**
-     * removes a robot from the robotList ArrayList
-     * @param r represents the robot being removed
-     */ 
-    public void removeRobot(Robot r) {
-    	robotList.remove(r);
-    }
-    /**
-     * returns the maximum battery
-     * @return <code>int</code> MAX_BATTERY
+     * Allows the Robot to move around the Grid
+     * It returns whether true it moves or not
+     * @param direction determines the direction the Robot travels in next
+     * @return <code>boolean</code> deciding if it moves or not
      */
-    public int getMaxBattery() {
-    	return MAX_BATTERY;
+	public boolean move(String direction){
+		try{
+		if (direction.equals("d")){
+			pos.changeY(1);
+		}
+		if (direction.equals("u")){
+			pos.changeY(-1);
+		}
+		if (direction.equals("r")){
+			pos.changeX(1);
+		}
+		if (direction.equals("l")){
+			pos.changeX(-1);
+		}
+		powerMinus();
+		return true;
+		}
+		catch (java.lang.NullPointerException e)
+		{
+			return false;
+		}
+	}
+	/**
+	 * The robot picks up the item and sets gotItem to true
+	 */
+	public void pickItem() {
+		gotItem = true;
+	}
+	/**
+	 * The robot drops the item after finishing the order
+	 */
+	public void drop() {
+		gotItem = false;
+		busy = false;
+	}
+	/**
+	 * This returns the current position of the Robot
+	 * @return <code>Cell</code> of the robot
+	 */
+	public Cell getCell(){
+		return pos;
+	}
+	/**
+	 * Returns the x location of Robot in Grid
+	 * @return <code>int</code> x coordinate
+	 */
+	public int getX(){
+		return pos.getX();
+	}
+	/**
+	 * Returns the y location of Robot in Grid
+	 * @return <code>int</code> y coordinate
+	 */
+	public int getY(){
+		return pos.getY();
+	}
+	/**
+	 * Returns whether the Robot is busy or not
+	 * @return <code>boolean</code> robot is processing order, or not
+	 */
+	public boolean getBusy(){
+		return busy;
+	}
+	/**
+	 * Returns whether robot returns to pod or not
+	 * @return <code>boolean</code> Robot return to pod or not
+	 */
+	public boolean getReturnToPod(){
+		return returnToPod;
+	}
+	/**
+	 * Returns whether the Robot has items or not
+	 * @return <code>boolean</code> Robot is carrying or not
+	 */
+	public boolean carrying() {
+		return gotItem;
+	}
+	/**
+	 * Returns the ChargingPod unique ID
+	 * @return <code>String</code> the ChargingPod ID
+	 */
+	public String getCPID() {
+		return pod.getID();
+	}
+	/**
+	 * Returns the Robot unique ID
+	 * @return <code>String</code> the Robt ID
+	 */
+	public String getRID() {
+		return rID;
+	}
+	/**
+	 * Returns the charge level of Robot
+	 * @return <code>int</code> battery level of Robot
+	 */
+	public int getCharge() {
+		return charge;
+	}
+	/**
+	 * Returns the location of PackingStation
+	 * @return <code>Cell</code> PackingStation position in Grid
+	 */
+	public Cell getStationCell(){
+		return stationCell;
+	}
+	/**
+	 * Returns the location of StorageShelf
+	 * @return <code>Cell</code> StorageShelf position in Grid
+	 */
+	public Cell getShelfCell(){
+		return shelfCell;
+	}
+	/**
+	 * Whether the Robot is not processing an order
+	 */
+	public void free(){
+		busy = false;
+	}
+	/**
+	 * Whether the Robot is processing an order
+	 */
+	public void busy(){
+		busy = true;
+	}
+	/**
+	 * Returns the cell of the destination location
+	 * @return <code>Cell</code> position of the desired location
+	 */
+	public Cell getDestination(){
+		if (getBusy()){
+			if (gotItem){
+				return stationCell;
+			}
+			else{
+
+				return shelfCell;
+			}
+		}
+		if (returnToPod){
+			return pod.getCell();
+		}
+		else {
+			return pos;
+		}
+	}
+	/**
+	 * Sends the robot back to its ChargingPod
+	 */
+	public void returnToPod(){
+		returnToPod = true;
+	}
+	/**
+	 * Sets the destination of the Robot
+	 * @param shelf is the StorageShelf
+	 * @param station is the PackingStation
+	 */
+	public void setDestintion (Cell shelf, Cell station){
+    	shelfCell = shelf;
+    	stationCell = station;
     }
-    /**
-     * method that makes the robot move
-     * @param xChange 
-     * @param yChange
-     */
-    public void move(int xChange, int yChange){
-    	if (!hasCrashed & !(returnToPod())){
-    		//move
-    		powerMinus();
-    		//checkLocation();
-    	}
-    }
-    /*public void checkLocation(){
-    	
-    	
-    	if (robotX == POD_X && robotY == POD_Y){
-    		charge();
-    	}
-    	/*if (hitRobot()){
-    		System.out.println("robot " + NAME + " crashed with another robot");
-    		//stop simulation
-    	}
-    	
-    	
-    }*/
-    	
-    
-   /*public boolean hitRobot(){
-    	for (int i = 0; grid.getRobots().length){
-    		if (!(grid.getRobots()[i].equals(grid.getRobots()[NAME]))){
-    			if (grid.getRobots()[i].getX() == robotX && grid.getRobots()[i].getY() == robotY){
-    				return true;
-    			}
-    		}
-    		i++;
-    	}
-    	return false;
-    }*/
-    
-    public Cell[] getX(){
-    	return robotX;
-    }
-    
-    public Cell[] getY(){
-    	return robotY;
-    }
-    
-    
-    private void powerMinus(){
-    	//use one if not carrying anything two if it is
-    	if(!hasCrashed) {
-    		if(!carrying) {
-    			battery--;
-    		}
-    		else if(carrying) {
-    			battery = battery -2;
-    		}
-    	}
-    	else if(hasCrashed) {
-    		System.out.println("One of the robots crashed, the simulation will now exit");
-    		//EXIT SIMULATION
-    	}
-    	
-    }
-    
-    public void acceptAssignment(){
-    	carrying = true;
-    }
-    public boolean returnToPod(){
-    	return false;
-    }
-    
-    public int getCharge() {
-    	return battery;
-    }
-    
-    public void charge() {
-    	battery++;
-    }
+	/**
+	 * Increments the battery level by 1 when charging
+	 */
+	public void charge() {
+		charge++;
+	}
+	/**
+	 * Returns the Robots ChargingPod
+	 * @return <code>ChargingPod</code> for Robot
+	 */
+	public ChargingPod getPod(){
+		return pod;
+	}
+	/**
+	 * Decreases power by 1 if empty, two if carrying
+	 */
+	private void powerMinus(){
+		
+		if (gotItem){
+			charge = charge - 2;
+		}
+		else{
+			charge = charge - 1;
+		}
+	}
+
 }

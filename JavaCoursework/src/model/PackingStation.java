@@ -1,77 +1,133 @@
 package model;
+
+import view.Cell;
 /**
- * Represents the object PackingStation
+ * The PackingStation class is used to make the PackingStation for the order
  * @author 
  *
  */
 public class PackingStation {
 	/**
-	 * refers to current packingStation status
-	 * @see #checkPS
+	 * cell is used to store position of PackingStation 
 	 */
-	private String status;
+	private Cell cell;
 	/**
-	 * keeps an array of orders used by the robot
-	 * @see #checkOrders
+	 * pID is the individual packingStation reference
 	 */
-	private String[] orders;
-	
+	private String pID;
 	/**
-	 * Creates a <code>PackingStation</code> holding items from orders
-	 * @param ord is the number of orders contained in the array
-	 * @param stat is the 
+	 * is the order currently being processed
 	 */
-	public PackingStation(int ord, int stat){
-		orders = new String[ord];
+	private Order order;
+	/**
+	 * If the packingStation is ready to be used
+	 */
+	private boolean needsRobot;
+	/**
+	 * If the packingStation is in use for order
+	 */
+	private boolean hasOrder;
+	/**
+	 * rID is the robot unique ID
+	 */
+	private String rID;
+
+	/**
+	 * Creates a <code>PackingStation</code> for robots use
+	 * @param cell is the cell position of the robot
+	 * @param pID is the PackingStation reference ID
+	 */
+	public PackingStation(Cell cell, String pID){
+		this.cell = cell;
+		this.pID = pID;
+		needsRobot = true;
+		hasOrder = false;
+	}
+	/**
+	 * Returns the PackingStation ID
+	 * @return <code>String</code> PackingStation ID
+	 */
+	public String getPID(){
+		return pID;
+	}
+	/**
+	 * Returns the Robot ID
+	 * @return <code>String</code> Robot ID
+	 */
+	public String getRID(){
+		return rID;
+	}
+	/**
+	 * Returns when ready to be used
+	 * @return <code>Boolean</code> If not in use by Robot
+	 */
+	public boolean readyToPack(){
+		return hasOrder;
+	}
+	/**
+	 * Returns when ready to be used
+	 * @return <code>Boolean</code> If not in use by Robot
+	 */
+	public boolean gotOrder() {
+		if (order == null){
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * Used to set the order currently being packed
+	 * @param order is the current order being packed
+	 */
+	public void setOrder (Order order){
+		this.order = order;
+	}
+
+	public Order getOrder(){
+		return order;
+	}
+
+	public boolean needsRobot(){
+		return needsRobot;
+	}
+
+	public int getX(){
+		return cell.getX();
+	}
+
+	public int getY(){
+		return cell.getY();
+	}
+
+	public Cell getCell(){
+		return cell;
+	}
+
+	public void hasRobot(String rID){
+		this.rID = rID;
+		needsRobot = false;
+	}
+
+	public void removeRobot(){
+		rID = "";
+		needsRobot = true;
 	}
 	
-	/**
-	 * returns current status of the PackingStation has
-	 * @return <code>String</code> status found by {@link #status} 
-	 */
-	public String checkPS() {
-		return status;
+	public void hasOrder(){
+		hasOrder = true;
 	}
 	
-	/**
-	 *returns number of orders being carried out
-	 *@return <code>int</code length of orders array {@link #orders}
-	 * 
-	 */
-	public int checkOrders() {
-		return orders.length;
-	}
-	/**
-	 * 
-	 */
-	
-	public void checkNextOrder() {
+	public void pack(){
+		order.changeTicks();
+		if (order.getTicks() == 0){
+			order = null;
+			hasOrder = false;
+			System.out.println("Packing Station " + getPID() + " finished packing its order");
+		}
+		else {
+			System.out.println("Packing Station " + getPID() + " is packing its order");
+		}
 		
 	}
-	/**
-	 * used to change current PackingStation status
-	 * @param stat refers to the 
-	 */
-	public void changeStatus(String stat) {
-		status = stat;
-	}
-	/**
-	 * sets the current order being packed
-	 * @param ord sets the orders
-	 */
-	public void setOrders(int ord) {
-		orders = new String[ord];
-	}
-	/**
-	 * sets the next order to be packed
-	 * @param next sets the next order to be packed
-	 */
-	public void setNext(String next) {
-		for (int i=0; i<orders.length; i++) {
-			if (!orders[i].isEmpty()) {
-				orders[i] = next;
-			}
-		}
 
-	}
 }
+

@@ -1,51 +1,56 @@
 package model;
 
-import javafx.scene.text.Text;
+import view.Cell;
 /**
- * represent ChargingPod object
+ * A class that is used to setup the ChargingPod
+ * The object is used to charge the robot
  * @author 
- * @version 24/04/18
+ *
  */
 public class ChargingPod {
 	/**
-	 * Max robot battery
+	 * This is the ChargingPod unique ID
 	 */
-	private static final int  MAX_BATTERY = 20;
+	String cID;
 	/**
-	 * Determines whether robot is charging or not
+	 * The cell the pod is placed in
 	 */
-	private boolean isCharging;
+	Cell pos;
 	/**
-	 * Creates a field of type robot
+	 * The rate at which it charges the Robot battery
 	 */
-	private Robot robot;
-	/**
-	 * Field to store text
-	 * @see #drawChargingPod()
-	 */
-	Text text = new Text();
-	
-	public ChargingPod() {
-		
+	int chargeSpeed;
+    /**
+     * Constructs the ChargingPod
+     * @param cID is the id of the ChargingPod
+     * @param cell is the cell the pod is placed in
+     * @param chargeSpeed is the rate of charge
+     */
+	public ChargingPod(String cID, Cell cell, int chargeSpeed) {
+		this.cID = cID;
+		pos = cell;
+		this.chargeSpeed = chargeSpeed;
 	}
 	/**
-	 * Charge the robot
-	 * {@link #robot}
+	 * returns the rate of charge
+	 * @return <code>int</code> rate of charge of battery
 	 */
-	public void charge(){
-		while (robot.getCharge() <= MAX_BATTERY/2) 
-		{
-			robot.charge();
-		}
+	public int getCharge(){
+		return chargeSpeed;
 	}
 	/**
-	 * draw the charging pod
-	 *
-	 * {@link #text}
+	 * Returns the ID of the ChargingPod
+	 * @return <code>String</code> ID of the pod 
 	 */
-	public void drawChargingPod() {
-		text.setText("Charging");
+	public String getID() {
+		return cID;
+
 	}
-	
-	
+	/**
+	 * Returns the cell the pod is in
+	 * @return <code>Cell</code> position in Grid
+	 */
+	public Cell getCell(){
+		return pos;
+	}
 }
