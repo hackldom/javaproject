@@ -7,60 +7,58 @@ import java.util.*;
 import view.*;
 public class Robot {
     private int battery;
-    private static final int  MAX_BATTERY = 20;
     private Cell pos;
-    private String item;
-    private boolean crashed;
     private boolean gotItem;
+    private boolean busy;
     private ChargingPod pod;
     private String rID;
 	private int charge;
 	private String cpID;
-    static String NAME;
-    private Cell destination;
+    private Cell shelfCell;
+    private Cell stationCell;
+    private boolean returnToPod;
 	List<Robot>	robotList = new ArrayList<Robot>();
-    
+
     public Robot(Cell cell, String rID, boolean isFree, int battery, ChargingPod pod){
     	pos = cell;
     	this.rID = rID;
-    	battery = MAX_BATTERY;
-    	crashed = false;
+    	this.charge = battery;
     	gotItem = false;
     	this.pod = pod;
+    	busy = false;
     }
 
     public void addRobot(Robot r) {
     	robotList.add(r);
     }
 
-	public void move(int xChange, int yChange){
-		if (!crashed){
-			//move
-			powerMinus();
+	public void move(String direction){
+		if (direction.equals("d")){
+			pos.changeY(1);
 		}
-		else if (gotItem = true) {
-			powerMinus();
-			powerMinus();
+		if (direction.equals("u")){
+			pos.changeY(-1);
 		}
-		else {
-			powerMinus();
+		if (direction.equals("r")){
+			pos.changeX(1);
+		}
+		if (direction.equals("l")){
+			pos.changeX(-1);
 		}
 	}
 
-	public void pickItem(String itemName) {
-		item = itemName;
+	public void pickItem() {
 		gotItem = true;
 	}
 
 	public void drop() {
-		item = "";
 		gotItem = false;
 	}
 
 	public Cell getCell(){
 		return pos;
 	}
-	
+
 	public int getX(){
 		return pos.getX();
 	}
@@ -69,12 +67,12 @@ public class Robot {
 		return pos.getY();
 	}
 
-	public boolean getCrashed() {
-		return crashed;
+	public boolean getBusy(){
+		return busy;
 	}
 
-	public String getItem() {
-		return item;
+	public boolean getReturnToPod(){
+		return returnToPod;
 	}
 
 	public boolean carrying() {
@@ -93,18 +91,53 @@ public class Robot {
 		return charge;
 	}
 	
-	public Cell getDestination(){
-		return destination;
+	public Cell getStationCell(){
+		return stationCell;
 	}
 	
-	public void setDestintion (Cell destination){
-    	this.destination = destination;
+	public Cell getShelfCell(){
+		return shelfCell;
+	}
+
+	public void free(){
+		busy = false;
+	}
+
+	public void busy(){
+		busy = true;
+	}
+
+	public Cell getDestination(){
+		if (getBusy()){
+			if (gotItem){
+				return stationCell;
+			}
+			else{
+				
+				return shelfCell;
+			}
+		}
+		if (returnToPod){
+			return pod.getCell();
+		}
+		else {
+			return null;
+		}
+	}
+
+	public void returnToPod(){
+		returnToPod = true;
+	}
+
+	public void setDestintion (Cell shelf, Cell station){
+    	shelfCell = shelf;
+    	stationCell = station;
     }
 
 	public void charge() {
 		charge++;
 	}
-	
+
 	public ChargingPod getPod(){
 		return pod;
 	}
@@ -112,9 +145,7 @@ public class Robot {
 	private void powerMinus(){
 		//use one if not carrying anything two if it is
 		charge = charge - 1;
-		if (charge == 0){
-			crashed = true;
-		}
+		
 	}
 
 }
