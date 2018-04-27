@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.*;
 import view.*;
 public class Robot {
-    private int battery;
     private Cell pos;
     private boolean gotItem;
     private boolean busy;
     private ChargingPod pod;
     private String rID;
 	private int charge;
+	public static int MAX_CHARGE;
 	private String cpID;
     private Cell shelfCell;
     private Cell stationCell;
@@ -26,13 +26,15 @@ public class Robot {
     	gotItem = false;
     	this.pod = pod;
     	busy = false;
+    	MAX_CHARGE = battery;
     }
 
     public void addRobot(Robot r) {
     	robotList.add(r);
     }
 
-	public void move(String direction){
+	public boolean move(String direction){
+		try{
 		if (direction.equals("d")){
 			pos.changeY(1);
 		}
@@ -45,6 +47,13 @@ public class Robot {
 		if (direction.equals("l")){
 			pos.changeX(-1);
 		}
+		powerMinus();
+		return true;
+		}
+		catch (java.lang.NullPointerException e)
+		{
+			return false;
+		}
 	}
 
 	public void pickItem() {
@@ -53,6 +62,7 @@ public class Robot {
 
 	public void drop() {
 		gotItem = false;
+		busy = false;
 	}
 
 	public Cell getCell(){
@@ -90,42 +100,6 @@ public class Robot {
 	public int getCharge() {
 		return charge;
 	}
-<<<<<<< HEAD
-	
-	public Cell getStationCell(){
-		return stationCell;
-	}
-	
-	public Cell getShelfCell(){
-		return shelfCell;
-	}
-
-	public void free(){
-		busy = false;
-	}
-
-	public void busy(){
-		busy = true;
-	}
-
-	public Cell getDestination(){
-		if (getBusy()){
-			if (gotItem){
-				return stationCell;
-			}
-			else{
-				
-				return shelfCell;
-			}
-		}
-		if (returnToPod){
-			return pod.getCell();
-		}
-		else {
-			return null;
-		}
-	}
-=======
 
 	public Cell getStationCell(){
 		return stationCell;
@@ -157,10 +131,9 @@ public class Robot {
 			return pod.getCell();
 		}
 		else {
-			return null;
+			return pos;
 		}
 	}
->>>>>>> 57673bf32ebdb18a6bcf40fac7ffd6c92a89b4c1
 
 	public void returnToPod(){
 		returnToPod = true;
@@ -181,12 +154,12 @@ public class Robot {
 
 	private void powerMinus(){
 		//use one if not carrying anything two if it is
-		charge = charge - 1;
-<<<<<<< HEAD
-		
-=======
-
->>>>>>> 57673bf32ebdb18a6bcf40fac7ffd6c92a89b4c1
+		if (gotItem){
+			charge = charge - 2;
+		}
+		else{
+			charge = charge - 1;
+		}
 	}
 
 }
